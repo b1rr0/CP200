@@ -153,6 +153,24 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .cf-pill{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.35rem .75rem;font-size:10.5px}
 .cf-pill b{color:var(--accent)}
 
+/* Upcoming contests */
+.contests-section{margin-top:1.5rem}
+.contests-list{display:flex;flex-direction:column;gap:.5rem}
+.ct-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;display:flex;align-items:center;gap:.85rem;transition:border-color .15s}
+.ct-card:hover{border-color:var(--border2)}
+.ct-card-info{flex:1;min-width:0}
+.ct-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ct-meta{font-size:10px;color:var(--muted);margin-top:2px;display:flex;gap:.75rem;align-items:center}
+.ct-type{font-size:8.5px;padding:1px 5px;border-radius:3px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.ct-type-cf{background:rgba(124,106,255,.12);color:var(--accent)}
+.ct-type-icpc{background:rgba(34,211,238,.12);color:var(--cyan)}
+.ct-type-ioi{background:rgba(74,222,128,.12);color:var(--green)}
+.ct-countdown{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;white-space:nowrap;letter-spacing:-.02em}
+.ct-countdown.ct-soon{color:var(--red)}
+.ct-countdown.ct-today{color:var(--amber)}
+.ct-countdown.ct-later{color:var(--green)}
+.ct-dur{font-size:9px;color:var(--muted);text-align:right}
+
 /* Rating tiers */
 .tiers-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem}
 .tiers-title{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem}
@@ -445,6 +463,14 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
           <!-- filled by renderTiers() -->
         </div>
       </div>
+
+        <!-- Upcoming contests -->
+        <div class="contests-section">
+          <div class="focus-title" id="contests-title">Upcoming Contests</div>
+          <div class="contests-list" id="contestTimers">
+            <div style="color:var(--muted);font-size:11px;padding:.5rem">Loading contests...</div>
+          </div>
+        </div>
 
       <!-- Focus now -->
       <div class="focus-section">
@@ -2734,6 +2760,46 @@ function buildSpark(vals,w,h,color){
 
 loadProfile();
 document.getElementById('cfHandle').addEventListener('keydown',e=>{if(e.key==='Enter')loadProfile();});
+
+// ─── UPCOMING CONTESTS ───
+let contestInterval=null;
+async function loadContests(){
+  try{
+    const r=await fetch('https://codeforces.com/api/contest.list');
+    const d=await r.json();
+    if(d.status!=='OK')return;
+    const upcoming=d.result.filter(c=>c.phase==='BEFORE').sort((a,b)=>a.startTimeSeconds-b.startTimeSeconds);
+    if(!upcoming.length){document.getElementById('contestTimers').innerHTML='<div style="color:var(--muted);font-size:11px;padding:.5rem">No upcoming contests</div>';return;}
+    document.getElementById('contests-title').textContent=`Upcoming Contests (${upcoming.length})`;
+    function renderContests(){
+      const now=Math.floor(Date.now()/1000);
+      document.getElementById('contestTimers').innerHTML=upcoming.map(c=>{
+        const diff=c.startTimeSeconds-now;
+        const days=Math.floor(diff/86400);
+        const hrs=Math.floor((diff%86400)/3600);
+        const mins=Math.floor((diff%3600)/60);
+        const secs=diff%60;
+        let cd='',cls='ct-later';
+        if(diff<0){cd='LIVE';cls='ct-soon';}
+        else if(days>0){cd=`${days}d ${hrs}h ${mins}m`;if(days<1)cls='ct-today';}
+        else if(hrs>0){cd=`${hrs}h ${mins}m ${secs}s`;cls=hrs<4?'ct-soon':'ct-today';}
+        else{cd=`${mins}m ${secs}s`;cls='ct-soon';}
+        const dt=new Date(c.startTimeSeconds*1000);
+        const dateStr=dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+', '+dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        const durH=Math.floor(c.durationSeconds/3600);
+        const durM=Math.floor((c.durationSeconds%3600)/60);
+        const durStr=durM?`${durH}h ${durM}m`:`${durH}h`;
+        const typeCls=c.type==='ICPC'?'ct-type-icpc':c.type==='IOI'?'ct-type-ioi':'ct-type-cf';
+        const name=c.name.replace('Codeforces Round ','CF ').replace('Educational Codeforces Round ','EDU ').replace('(Rated for Div. 2)','Div.2').replace(/\(Div\. (\d)\)/,'Div.$1').trim();
+        return`<div class="ct-card"><div class="ct-card-info"><div class="ct-name" title="${c.name}">${name}</div><div class="ct-meta"><span class="ct-type ${typeCls}">${c.type}</span><span>${dateStr}</span><span>${durStr}</span></div></div><div style="text-align:right"><div class="ct-countdown ${cls}">${cd}</div></div></div>`;
+      }).join('');
+    }
+    renderContests();
+    if(contestInterval)clearInterval(contestInterval);
+    contestInterval=setInterval(renderContests,1000);
+  }catch(e){document.getElementById('contestTimers').innerHTML=`<div style="color:var(--red);font-size:11px;padding:.5rem">Failed to load contests</div>`;}
+}
+loadContests();
 </script>
 </body>
 </html>
