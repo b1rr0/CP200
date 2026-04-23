@@ -370,6 +370,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .tip-card code{background:var(--bg);padding:1px 5px;border-radius:3px;font-size:10.5px;color:var(--amber)}
 
 /* DS table */
+.ds-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:8px}
 .ds-table{width:100%;border-collapse:collapse;font-size:11px}
 .ds-table th{background:var(--bg4);border:1px solid var(--border);padding:.45rem .65rem;text-align:left;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
 .ds-table td{border:1px solid var(--border);padding:.4rem .65rem;vertical-align:top}
@@ -408,9 +409,9 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   .key-stats{grid-template-columns:repeat(2,1fr)}
   .tier-grid{grid-template-columns:repeat(4,1fr)}
   .cheat-wrap{padding:1.5rem 1.25rem;max-width:none;overflow:visible}
+  .cheat-section{min-width:0}
   .g2{grid-template-columns:1fr}
   .tips-grid{grid-template-columns:1fr}
-  .ds-table-wrap,.ds-table{display:block;overflow-x:auto;max-width:100%}
 }
 
 /* Phone ≤ 640px */
@@ -483,7 +484,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   .cheat-wrap h1{font-size:1.5rem}
   .cheat-section-title{font-size:1rem}
   .lang-pills{flex-wrap:wrap}
-  .ds-table{font-size:10.5px;min-width:520px}
+  .ds-table{font-size:10.5px;min-width:560px}
+  .ds-table th,.ds-table td{padding:.35rem .5rem}
 }
 
 /* Very small phones ≤ 380px */
@@ -2164,6 +2166,7 @@ t = <span class="fn">int</span>(<span class="fn">input</span>())
   <!-- ─── SECTION 3: DATA STRUCTURES ─── -->
   <div class="cheat-section">
     <div class="cheat-section-title"><span class="sec-icon">🗂️</span> Data Structures — C++ / Java / Python</div>
+    <div class="ds-table-wrap">
     <table class="ds-table">
       <thead>
         <tr><th>Structure</th><th>C++</th><th>Java</th><th>Python</th><th>Notes</th></tr>
@@ -2269,6 +2272,7 @@ t = <span class="fn">int</span>(<span class="fn">input</span>())
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 
 </div>
