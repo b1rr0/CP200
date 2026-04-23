@@ -378,13 +378,133 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .ds-table .ds-cat{font-weight:700;color:var(--text);white-space:nowrap}
 .ds-table .ds-note{color:var(--muted);font-size:10px;display:block;margin-top:2px}
 
+/* ══════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════ */
+
+/* Burger (shown only on mobile) */
+.nav-burger{display:none;background:transparent;border:1px solid var(--border2);color:var(--text);width:34px;height:30px;border-radius:6px;cursor:pointer;align-items:center;justify-content:center;padding:0;flex-shrink:0}
+.nav-burger svg{width:16px;height:16px}
+.nav-burger:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Tablet ≤ 960px — stack main layouts, let page scroll */
+@media (max-width: 960px){
+  html,body{height:auto}
+  body{min-height:100vh}
+  .page{overflow:visible}
+  .page.active{display:block}
+  .dash-layout{display:block;overflow:visible}
+  .profile-col{border-right:none;border-bottom:1px solid var(--border);overflow:visible;padding:1.25rem 1rem}
+  .dash-right{padding:1.5rem 1.25rem;gap:1.25rem;overflow:visible}
+  .dash-right::before{display:none}
+  .study-layout{display:block;overflow:visible}
+  .study-sidebar{border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;overflow-y:hidden;padding:.75rem;display:flex;gap:.5rem;flex-wrap:nowrap;white-space:nowrap}
+  .study-sidebar .sl{padding:0;margin:0;min-width:max-content}
+  .study-sidebar .slabel{display:none}
+  .study-sidebar .ni{padding:.4rem .65rem;border:1px solid var(--border);border-radius:6px}
+  .study-sidebar .ni.active{border-color:var(--accent)}
+  .study-main{padding:1.5rem 1.25rem;overflow:visible}
+  .focus-grid{grid-template-columns:1fr 1fr}
+  .key-stats{grid-template-columns:repeat(2,1fr)}
+  .tier-grid{grid-template-columns:repeat(4,1fr)}
+  .cheat-wrap{padding:1.5rem 1.25rem;max-width:none;overflow:visible}
+  .g2{grid-template-columns:1fr}
+  .tips-grid{grid-template-columns:1fr}
+  .ds-table-wrap,.ds-table{display:block;overflow-x:auto;max-width:100%}
+}
+
+/* Phone ≤ 640px */
+@media (max-width: 640px){
+  body{font-size:12px}
+
+  /* Navbar becomes two-row: [logo | burger | right] / [tabs] */
+  .navbar{flex-wrap:wrap;height:auto;padding:.55rem .75rem;gap:.5rem;position:relative}
+  .nav-logo{margin-right:0;font-size:.9rem}
+  .nav-burger{display:flex;order:2;margin-left:auto}
+
+  .nav-tabs{order:5;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:.25rem;border-top:1px solid var(--border);padding-top:.45rem;margin-top:.25rem;display:none}
+  .nav-tabs::-webkit-scrollbar{display:none}
+  .navbar.open .nav-tabs{display:flex}
+  .nav-tab{padding:.55rem .85rem;flex-shrink:0;font-size:11.5px;border:1px solid var(--border);border-radius:6px}
+  .nav-tab.active{border-color:var(--accent)}
+
+  .nav-right{order:3;margin-left:auto;gap:.4rem;flex-wrap:nowrap}
+  .nav-right > div:first-child{margin-right:.35rem!important}
+  .handle-input-wrap{gap:.3rem}
+  .handle-input-wrap input{width:90px;font-size:10.5px;padding:.3rem .5rem}
+  .handle-input-wrap button{padding:.3rem .55rem;font-size:10px}
+  .lang-btn{padding:.22rem .45rem;font-size:9.5px}
+
+  /* Dashboard */
+  .profile-col{padding:1rem .85rem}
+  .dash-right{padding:1.1rem .85rem;gap:1rem}
+  .dash-h1{font-size:clamp(1.5rem,7vw,2rem)}
+  .elo-row{gap:.55rem}
+  .elo-num{font-size:2rem}
+  .pcard-banner{height:52px}
+  .av-row{gap:.65rem;margin-top:-24px}
+  .avatar-wrap{width:48px;height:48px}
+  .name-block{padding-top:22px}
+  .p-handle{font-size:1rem}
+  .sg{grid-template-columns:1fr 1fr}
+  .tag-name{width:88px;font-size:10px}
+
+  .focus-grid{grid-template-columns:1fr}
+  .key-stats{grid-template-columns:repeat(2,1fr)}
+  .tier-grid{grid-template-columns:repeat(2,1fr);gap:.5rem}
+  .tiers-card{padding:1rem .85rem}
+
+  /* Contest rows — drop date column on narrow screens */
+  .crow{grid-template-columns:1fr 55px 50px;font-size:10px;padding:.5rem .65rem;gap:.45rem}
+  .crow .c-date{display:none}
+
+  .ct-card{padding:.55rem .7rem;gap:.55rem}
+  .ct-countdown{font-size:1rem}
+  .ct-meta{flex-wrap:wrap;gap:.4rem}
+
+  /* Study */
+  .study-main{padding:1.1rem .85rem}
+  .th{flex-wrap:wrap;gap:.65rem}
+  .ti{width:34px;height:34px;font-size:1rem}
+  .tt{font-size:1.1rem}
+  .tm{margin-left:0;width:100%}
+
+  .ph2,.pr{grid-template-columns:1fr 56px 44px 28px;padding:.45rem .55rem;gap:.3rem;font-size:10px}
+  .pname{font-size:10.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .pname a{display:block;overflow:hidden;text-overflow:ellipsis}
+  .prat{font-size:10px}
+  .pp{font-size:8.5px;padding:1px 4px}
+
+  .res-grid{grid-template-columns:1fr}
+  .code-block,.cb{font-size:10.5px;padding:.6rem .7rem}
+
+  /* Cheatsheet */
+  .cheat-wrap{padding:1rem .85rem}
+  .cheat-wrap h1{font-size:1.5rem}
+  .cheat-section-title{font-size:1rem}
+  .lang-pills{flex-wrap:wrap}
+  .ds-table{font-size:10.5px;min-width:520px}
+}
+
+/* Very small phones ≤ 380px */
+@media (max-width: 380px){
+  .nav-logo{font-size:.8rem}
+  .handle-input-wrap input{width:78px}
+  .sg{grid-template-columns:1fr}
+  .key-stats{grid-template-columns:1fr 1fr}
+  .crow{grid-template-columns:1fr 44px 40px;font-size:9.5px}
+}
+
 </style>
 </head>
 <body>
 
 <!-- ══════ NAVBAR ══════ -->
-<nav class="navbar">
+<nav class="navbar" id="navbar">
   <div class="nav-logo">CP<span>·2200</span></div>
+  <button class="nav-burger" id="navBurger" aria-label="Toggle navigation" onclick="toggleNav()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="switchPage('dashboard')" id="tab-dashboard">
       <span class="nav-tab-icon">⚡</span> Dashboard
@@ -2186,6 +2306,14 @@ function switchPage(id){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('tab-'+id).classList.add('active');
+  const nb=document.getElementById('navbar');
+  if(nb) nb.classList.remove('open');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function toggleNav(){
+  const nb=document.getElementById('navbar');
+  if(nb) nb.classList.toggle('open');
 }
 
 function goStudy(topicId){
